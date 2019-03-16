@@ -1,9 +1,11 @@
 import React from 'react';
 import { Text, View, Button } from 'react-native';
-
-export default class LocationItem extends React.Component {
+import { withNavigation } from 'react-navigation';
+class LocationItem extends React.Component {
   _onPress = () => {
-    this.props.onPressItem(this.props.id);
+    // this.props.onPressItem(this.props.id);
+
+    this.props.navigation.navigate('HomeStack', {from: 'Location'});
   };
 
   render() {
@@ -31,3 +33,5 @@ export default class LocationItem extends React.Component {
     );
   }
 }
+
+export default withNavigation(LocationItem);
