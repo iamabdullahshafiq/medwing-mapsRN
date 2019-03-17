@@ -10,7 +10,6 @@ import {
   Button
 } from 'react-native';
 
-
 export class CreateLocationScreen extends React.Component {
   state = {
     title: '',
@@ -23,7 +22,7 @@ export class CreateLocationScreen extends React.Component {
       description: this.state.description,
       latitude: this.props.markerCord.latitude,
       longitude: this.props.markerCord.longitude
-    }
+    };
     this.props.createMapLocation(location);
   };
 
@@ -102,14 +101,25 @@ export class CreateLocationScreen extends React.Component {
               onChangeText={description => this.setState({ description })}
               value={this.state.description}
             />
-            <View style={{backgroundColor: '#841584', width: '90%'}}>
+            <View style={{ backgroundColor: '#841584', width: '90%' }}>
               <Button onPress={this._onSavePress} title="Save" color="#fff" />
             </View>
 
-            <View style={{ borderWidth: 1,borderColor: '#841584', width: '90%', marginVertical: 10}}>
-              <Button onPress={this._onCancelPress} title="Cancel" color="#841584" />
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: '#841584',
+                width: '90%',
+                marginVertical: 10
+              }}
+            >
+              <Button
+                onPress={this._onCancelPress}
+                title="Cancel"
+                color="#841584"
+              />
             </View>
-            
+
             {/* <TouchableHighlight
             onPress={() => {
               this.props.setModalVisible(!this.props.modalVisible);

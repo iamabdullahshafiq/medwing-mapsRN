@@ -1,41 +1,31 @@
 import React from 'react';
-import {
-  Modal,
-  StyleSheet,
-  View,
-  Text,
-  TouchableHighlight,
-  Alert,
-  TextInput,
-  Button
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { MapView } from 'expo';
-import { CreateLocationScreen } from './CreateLocationScreen';
+import { withNavigation } from 'react-navigation';
 
-export default class HomeScreen extends React.Component {
+import { CreateLocationScreen } from './CreateLocationScreen';
+import { getLocationsFromApi, createLocation } from '../utils/requestService';
+
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      markers: [],
-      modalVisible: false,
-      selectedPosition: null
-    };
-  }
+  state = { markers: [], modalVisible: false, selectedPosition: null };
 
   componentDidMount() {
-    this.getAllLocations();
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this._getAllLocations();
+    });
   }
 
-  componentWillReceiveProps(nextProps){
-    console.log('nextProps', nextProps.navigation);
+  componentWillUnmount() {
+    this.focusListener.remove();
   }
 
-  async getAllLocations() {
-    let locations = await this.getMoviesFromApi();
+  async _getAllLocations() {
+    let locations = await getLocationsFromApi();
     locations = locations.map(marker => {
       marker.latlng = {
         latitude: marker.latitude,
@@ -46,36 +36,9 @@ export default class HomeScreen extends React.Component {
     this.setState({ markers: locations });
   }
 
-  async getMoviesFromApi() {
-    try {
-      let response = await fetch('http://localhost:3000/v1/locations');
-      let responseJson = await response.json();
-      return responseJson;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async createLink(body) {
-    try {
-      let response = await fetch('http://localhost:3000/v1/locations', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-      let responseJson = await response.json();
-      return responseJson;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async createMapLocation(location) {
+  async _createMapLocation(location) {
     const { markers } = this.state;
-    let marker = await this.createLink(location);
+    let marker = await createLocation(location);
     marker.latlng = {
       latitude: marker.latitude,
       longitude: marker.longitude
@@ -84,7 +47,7 @@ export default class HomeScreen extends React.Component {
     this.setState({ markers, modalVisible: false });
   }
 
-  setModalVisible(visible) {
+  _setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
 
@@ -93,8 +56,8 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <CreateLocationScreen
           modalVisible={this.state.modalVisible}
-          setModalVisible={visible => this.setModalVisible(visible)}
-          createMapLocation={position => this.createMapLocation(position)}
+          setModalVisible={visible => this._setModalVisible(visible)}
+          createMapLocation={position => this._createMapLocation(position)}
           markerCord={this.state.selectedPosition}
         />
         <MapView
@@ -106,10 +69,10 @@ export default class HomeScreen extends React.Component {
             longitudeDelta: 0.0421
           }}
           onLongPress={position => {
-            this.setModalVisible(true);
             this.setState({
               selectedPosition: position.nativeEvent.coordinate
             });
+            this._setModalVisible(true);
           }}
         >
           {this.state.markers.map(marker => (
@@ -132,3 +95,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   }
 });
+
+export default withNavigation(HomeScreen);
