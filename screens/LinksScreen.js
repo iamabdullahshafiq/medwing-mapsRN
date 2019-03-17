@@ -30,7 +30,15 @@ class LinksScreen extends React.Component {
 
   _keyExtractor = item => item.id.toString();
 
-  _renderItem = ({ item }) => <LocationItem item={item} />;
+  _renderItem = ({ item }) => (
+    <LocationItem item={item} itemDeleted={this._deleteItem} />
+  );
+
+  _deleteItem = id => {
+    const { locations } = this.state;
+    const _locations = locations.filter(e => e.id !== id);
+    this.setState({ locations: _locations });
+  };
 
   render() {
     return (
