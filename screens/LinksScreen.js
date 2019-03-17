@@ -31,13 +31,21 @@ class LinksScreen extends React.Component {
   _keyExtractor = item => item.id.toString();
 
   _renderItem = ({ item }) => (
-    <LocationItem item={item} itemDeleted={this._deleteItem} />
+    <LocationItem
+      item={item}
+      itemDeleted={this._deleteItem}
+      editItem={this._editItem}
+    />
   );
 
   _deleteItem = id => {
     const { locations } = this.state;
     const _locations = locations.filter(e => e.id !== id);
     this.setState({ locations: _locations });
+  };
+
+  _editItem = item => {
+    this.props.navigation.navigate('Home', { edit: true, item: item });
   };
 
   render() {

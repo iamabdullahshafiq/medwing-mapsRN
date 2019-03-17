@@ -10,26 +10,7 @@ import {
   Button
 } from 'react-native';
 
-export class CreateLocationScreen extends React.Component {
-  state = {
-    title: '',
-    description: ''
-  };
-
-  _onSavePress = () => {
-    const location = {
-      title: this.state.title,
-      description: this.state.description,
-      latitude: this.props.markerCord.latitude,
-      longitude: this.props.markerCord.longitude
-    };
-    this.props.createMapLocation(location);
-  };
-
-  _onCancelPress = () => {
-    this.props.setModalVisible(false);
-  };
-
+export class LocationCreateAndUpdateScreen extends React.Component {
   render() {
     return (
       <Modal
@@ -65,7 +46,9 @@ export class CreateLocationScreen extends React.Component {
                 fontWeight: 'bold'
               }}
             >
-              Create Location
+              {this.props.locationFormType === 'Create'
+                ? 'Create Location'
+                : 'Update Location'}
             </Text>
 
             <Text style={{ width: '90%', textAlign: 'left', color: '#841584' }}>
@@ -81,8 +64,8 @@ export class CreateLocationScreen extends React.Component {
                 marginVertical: 10,
                 padding: 10
               }}
-              onChangeText={title => this.setState({ title })}
-              value={this.state.title}
+              value={this.props.title}
+              onChangeText={title => this.props.setTitle(title)}
             />
 
             <Text style={{ width: '90%', textAlign: 'left', color: '#841584' }}>
@@ -98,11 +81,21 @@ export class CreateLocationScreen extends React.Component {
                 marginVertical: 10,
                 padding: 10
               }}
-              onChangeText={description => this.setState({ description })}
-              value={this.state.description}
+              value={this.props.description}
+              onChangeText={description =>
+                this.props.setDescription(description)
+              }
             />
             <View style={{ backgroundColor: '#841584', width: '90%' }}>
-              <Button onPress={this._onSavePress} title="Save" color="#fff" />
+              {this.props.locationFormType === 'Create' ? (
+                <Button onPress={this.props.onSave} title="Save" color="#fff" />
+              ) : (
+                <Button
+                  onPress={this.props.onUpdate}
+                  title="Update"
+                  color="#fff"
+                />
+              )}
             </View>
 
             <View
@@ -114,7 +107,7 @@ export class CreateLocationScreen extends React.Component {
               }}
             >
               <Button
-                onPress={this._onCancelPress}
+                onPress={this.props.onCancel}
                 title="Cancel"
                 color="#841584"
               />

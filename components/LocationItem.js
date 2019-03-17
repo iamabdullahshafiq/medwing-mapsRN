@@ -5,8 +5,8 @@ import { withNavigation } from 'react-navigation';
 import { deleteLocation } from '../utils/requestService';
 
 class LocationItem extends React.Component {
-  _onPress = () => {
-    this.props.navigation.navigate('HomeStack', { from: 'Location' });
+  _onEditPress = item => {
+    this.props.editItem(item);
   };
 
   _onDeletePress = async id => {
@@ -25,7 +25,11 @@ class LocationItem extends React.Component {
           <Text>Longitude: {item.longitude}</Text>
         </View>
         <View>
-          <Button onPress={this._onPress} title="Edit" color="#841584" />
+          <Button
+            onPress={() => this._onEditPress(item)}
+            title="Edit"
+            color="#841584"
+          />
           <Button
             onPress={() => this._onDeletePress(item.id)}
             title="Delete"
