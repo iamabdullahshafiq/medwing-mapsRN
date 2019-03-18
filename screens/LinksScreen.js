@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { withNavigation } from 'react-navigation';
 
 import LocationItem from '../components/LocationItem';
@@ -50,13 +50,30 @@ class LinksScreen extends React.Component {
 
   render() {
     return (
-      <FlatList
-        data={this.state.locations}
-        keyExtractor={this._keyExtractor}
-        renderItem={this._renderItem}
-      />
+      <View style={styles.container}>
+        {this.state.locations.length > 0 ? (
+          <FlatList
+            data={this.state.locations}
+            keyExtractor={this._keyExtractor}
+            renderItem={this._renderItem}
+          />
+        ) : (
+          <Text style={styles.noDataText}>No Locations Available</Text>
+        )}
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  noDataText: {
+    paddingVertical: 30,
+    alignSelf: 'center',
+    fontSize: 16
+  }
+});
 
 export default withNavigation(LinksScreen);
