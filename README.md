@@ -20,4 +20,4 @@ yarn start
 - Additionally for a small demo project redux adds more complexity but will include it in bigger applications, where it provided solution to many problems.
 
 # third-party API integration
-Iplemented this demo using Expo api which provides a wrapper around react-native-maps. so any breaking changes in the plugin will be handled by Expo wrapper thus avoinding errors and crashes.
+Iplemented this demo using [Expo](https://expo.io/) api which provides a wrapper around [react-native-maps](https://github.com/react-native-community/react-native-maps). so any breaking changes in the plugin will be handled by Expo wrapper thus avoinding errors and crashes.
