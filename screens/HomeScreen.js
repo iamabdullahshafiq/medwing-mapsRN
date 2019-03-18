@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { MapView } from 'expo';
 import { withNavigation } from 'react-navigation';
 
@@ -22,7 +22,8 @@ class HomeScreen extends React.Component {
     id: null,
     title: '',
     description: '',
-    locationFormType: 'Create'
+    locationFormType: 'Create',
+    isLoading: false
   };
 
   componentDidMount() {
@@ -75,6 +76,7 @@ class HomeScreen extends React.Component {
     this.setState({
       markers,
       modalVisible: false,
+      isLoading: false,
       locationFormValues: {
         title: '',
         description: ''
@@ -83,6 +85,7 @@ class HomeScreen extends React.Component {
   };
 
   _onUpdatePressed = async () => {
+    this.setState({ isLoading: true });
     const { id, title, description, markers } = this.state;
     const location = {
       title: title,
@@ -101,7 +104,8 @@ class HomeScreen extends React.Component {
       title: '',
       description: '',
       locationFormType: 'Create',
-      modalVisible: false
+      modalVisible: false,
+      isLoading: false
     });
   };
 
@@ -128,6 +132,7 @@ class HomeScreen extends React.Component {
   };
 
   _onSavePressed = () => {
+    this.setState({ isLoading: true });
     const location = {
       title: this.state.title,
       description: this.state.description,
@@ -150,12 +155,13 @@ class HomeScreen extends React.Component {
           onCancel={this._onCancelPressed}
           onSave={this._onSavePressed}
           onUpdate={this._onUpdatePressed}
+          isLoading={this.state.isLoading}
         />
         <MapView
           style={styles.container}
           initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
+            latitude: 52.520008,
+            longitude: 13.404954,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
@@ -175,6 +181,11 @@ class HomeScreen extends React.Component {
             />
           ))}
         </MapView>
+        <View style={styles.tabBarInfoContainer}>
+          <Text style={styles.tabBarInfoText}>
+            Long Press on map to add new location
+          </Text>
+        </View>
       </View>
     );
   }
@@ -184,6 +195,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
+  },
+  tabBarInfoContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    shadowColor: 'black',
+    shadowOffset: { height: -3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    alignItems: 'center',
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 20
+  },
+  tabBarInfoText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center'
   }
 });
 
