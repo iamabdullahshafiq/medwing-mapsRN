@@ -1,6 +1,12 @@
 # medwing-mapsRN
 Maps demo application for medwing job
 
+# Installing dependencies and starting dev server
+```
+yarn install
+yarn start
+```
+
 # Design decisions
 - Implemented the tabs view to show map with pointers on first page and listing on second so the user can access both views easily.
 - Creating location via adding latitude and longitude is a hectic work so in order to create location provided the long press functionality so that user can create location easily.
@@ -12,3 +18,6 @@ Maps demo application for medwing job
 # Reasons for not using Redux
 - As with growing demand for state managment systems within react apps. peaople started using redux and now moving towards react hooks. So i avoided using any external packages like redux, redux-saga, redux-form. Implemented this demo purely using react-native concepts.
 - Additionally for a small demo project redux adds more complexity but will include it in bigger applications, where it provided solution to many problems.
+
+# third-party API integration
+Iplemented this demo using Expo api which provides a wrapper around react-native-maps. so any breaking changes in the plugin will be handled by Expo wrapper thus avoinding errors and crashes.
